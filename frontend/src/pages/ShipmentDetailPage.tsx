@@ -14,6 +14,7 @@ import { slaRemaining, riskColor } from '../lib/formatters';
 import type { Shipment, Leg, CascadeImpactReport, DecisionRecord } from '../lib/types';
 import { DecisionCard } from '../components/decision/DecisionCard';
 import { CascadeGraph } from '../components/shipment/CascadeGraph';
+import { ShipmentTimeline } from '../components/shipment/ShipmentTimeline';
 
 const LEG_ICONS: Record<string, React.ElementType> = {
   trucking: Truck,
@@ -282,6 +283,11 @@ export function ShipmentDetailPage() {
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-5">Leg Breakdown</h3>
         <LegBreakdown legs={shipment.legs} />
+      </div>
+
+      {/* Journey Timeline */}
+      <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+        <ShipmentTimeline shipment={shipment} />
       </div>
 
       {/* Cascade */}
