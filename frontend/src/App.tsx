@@ -8,6 +8,8 @@ import { CommandPalette } from './components/ui/CommandPalette';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { PageTransition } from './components/ui/PageTransition';
 import { KeyboardShortcuts } from './components/ui/KeyboardShortcuts';
+import { GlobalScanOverlay } from './components/ui/GlobalScanOverlay';
+import { DisruptionAlert, ActiveDisruptionBanner } from './components/ui/DisruptionAlert';
 import { DashboardPage } from './pages/DashboardPage';
 import { ShipmentDetailPage } from './pages/ShipmentDetailPage';
 import { DecisionsPage } from './pages/DecisionsPage';
@@ -20,7 +22,6 @@ function SSEWrapper({ children }: { children: React.ReactNode }) {
 
 function AnimatedRoutes() {
   const location = useLocation();
-
   return (
     <PageTransition>
       <Routes location={location}>
@@ -43,8 +44,11 @@ function App() {
           </ErrorBoundary>
           <CommandPalette />
           <KeyboardShortcuts />
+          <GlobalScanOverlay />
+          <ActiveDisruptionBanner />
         </Layout>
         <MobileNav />
+        <DisruptionAlert />
       </SSEWrapper>
     </BrowserRouter>
   );
