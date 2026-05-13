@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Anchor, Ship, Truck, Train, Plane, Package, AlertTriangle } from 'lucide-react';
+import { Loading } from '../components/ui/Loading';
 import { api } from '../lib/api';
-import { usePigeonStore } from '../store/usePigeonStore';
+// import { usePigeonStore } from '../store/usePigeonStore';
 import { RiskBadge } from '../components/ui/RiskBadge';
 import { Button } from '../components/ui/Button';
 import { getRouteDisplay } from '../lib/constants';
-import { slaRemaining, riskColor, formatEtaDelta } from '../lib/formatters';
+import { slaRemaining, riskColor } from '../lib/formatters';
 import type { Shipment, Leg, CascadeImpactReport, DecisionRecord } from '../lib/types';
 import { DecisionCard } from '../components/decision/DecisionCard';
 
@@ -60,10 +61,9 @@ function LegBreakdown({ legs }: { legs: Leg[] }) {
 function CascadeSection({ shipment }: { shipment: Shipment }) {
   const [report, setReport] = useState<CascadeImpactReport | null>(null);
   const [delayHours, setDelayHours] = useState(18);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     api.simulateCascade(shipment.shipment_id, delayHours)
       .then(setReport)
       .finally(() => setLoading(false));
@@ -163,7 +163,6 @@ export function ShipmentDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
     api.shipment(id)
       .then(setShipment)
       .finally(() => setLoading(false));
@@ -194,11 +193,7 @@ export function ShipmentDetailPage() {
   }
 
   if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-xs text-slate-500 animate-pulse">Loading shipment...</div>
-      </div>
-    );
+    return <Loading text="Loading shipment..." />;
   }
 
   if (!shipment) {

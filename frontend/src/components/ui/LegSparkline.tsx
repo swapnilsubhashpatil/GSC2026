@@ -1,6 +1,6 @@
 /** @format */
 
-import { riskColor } from '../../lib/formatters';
+// import { riskColor } from '../../lib/formatters';
 import type { Leg } from '../../lib/types';
 
 interface LegSparklineProps {

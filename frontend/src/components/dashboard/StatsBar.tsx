@@ -16,7 +16,7 @@ export function StatsBar() {
   // Calculate total SLA exposure from active disruptions or high-risk shipments
   const totalExposure = all
     .filter((s) => s.weighted_risk_score >= 70)
-    .reduce((sum, s) => {
+    .reduce((sum) => {
       // Rough estimate: $50k per high-risk shipment
       return sum + 50000;
     }, 0);

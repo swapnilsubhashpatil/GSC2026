@@ -1,6 +1,7 @@
 /** @format */
 
 import { useState, useEffect } from 'react';
+import { Loading } from '../components/ui/Loading';
 import { StatsBar } from '../components/dashboard/StatsBar';
 import { ShipmentLeaderboard } from '../components/dashboard/ShipmentLeaderboard';
 import { EventFeed } from '../components/dashboard/EventFeed';
@@ -34,11 +35,7 @@ export function DashboardPage() {
   }
 
   if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-xs text-slate-500 animate-pulse">Loading command center...</div>
-      </div>
-    );
+    return <Loading text="Loading command center..." />;
   }
 
   return (

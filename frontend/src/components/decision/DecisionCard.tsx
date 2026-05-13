@@ -1,6 +1,6 @@
 /** @format */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { CheckCircle2, Zap, X, AlertTriangle } from 'lucide-react';
 import type { DecisionRecord, DecisionOption } from '../../lib/types';
 import { api } from '../../lib/api';
@@ -182,7 +182,7 @@ export function DecisionCard({ decision, onUpdate, compact }: DecisionCardProps)
         id: `approved-${decision.decision_id}`,
         type: 'approved',
         message: `Approved ${decision.decision_id} for ${decision.shipment_id}`,
-        timestamp: Date.now(),
+        timestamp: +new Date(),
       });
     } catch (err) {
       console.error('Approve failed:', err);

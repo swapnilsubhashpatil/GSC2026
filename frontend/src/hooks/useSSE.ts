@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { API_BASE_URL } from '../lib/constants';
 import { usePigeonStore } from '../store/usePigeonStore';
-import type { SseEvent, FeedItem } from '../lib/types';
+import type { SseEvent } from '../lib/types';
 
 export function useSSE() {
   const setShipments = usePigeonStore((s) => s.setShipments);

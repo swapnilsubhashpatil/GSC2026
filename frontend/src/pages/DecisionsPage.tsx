@@ -1,6 +1,7 @@
 /** @format */
 
 import { useState, useEffect } from 'react';
+import { Loading } from '../components/ui/Loading';
 import { GitPullRequest, ArrowRight, CheckCircle2, Zap, XCircle, Clock } from 'lucide-react';
 import { api } from '../lib/api';
 import { usePigeonStore } from '../store/usePigeonStore';
@@ -9,7 +10,7 @@ import { Button } from '../components/ui/Button';
 import { formatUSD, formatRelativeTime } from '../lib/formatters';
 import type { DecisionRecord } from '../lib/types';
 
-function PendingRow({ decision, onExpand }: { decision: DecisionRecord; onExpand: () => void }) {
+function PendingRow({ decision }: { decision: DecisionRecord }) {
   const shipments = usePigeonStore((s) => s.shipments);
   const shipment = shipments.get(decision.shipment_id);
   const recommended = decision.options[0];
@@ -19,8 +20,13 @@ function PendingRow({ decision, onExpand }: { decision: DecisionRecord; onExpand
     if (!recommended) return;
     try {
       await api.approveDecision(decision.decision_id, recommended.option_id);
-      // Refresh will happen via store update
-      window.location.reload();
+      usePigeonStore.getState().resolveDecision(decision.decision_id, 'approved');
+      usePigeonStore.getState().pushFeedItem({
+        id: `approved-${decision.decision_id}`,
+        type: 'approved',
+        message: `Approved ${decision.decision_id} for ${decision.shipment_id}`,
+        timestamp: Date.now(),
+      });
     } catch (err) {
       console.error(err);
     }
@@ -142,11 +148,7 @@ export function DecisionsPage() {
   }, [setAuditLog]);
 
   if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <div className="text-xs text-slate-500 animate-pulse">Loading decisions...</div>
-      </div>
-    );
+    return <Loading text="Loading decisions..." />;
   }
 
   return (

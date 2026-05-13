@@ -42,7 +42,7 @@ interface PigeonStore {
   setConnected: (v: boolean) => void;
 }
 
-export const usePigeonStore = create<PigeonStore>((set, get) => ({
+export const usePigeonStore = create<PigeonStore>((set) => ({
   shipments: new Map(),
   setShipments: (shipments) =>
     set({
