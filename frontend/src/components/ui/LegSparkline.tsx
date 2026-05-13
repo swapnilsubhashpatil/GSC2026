@@ -1,6 +1,5 @@
 /** @format */
 
-// import { riskColor } from '../../lib/formatters';
 import type { Leg } from '../../lib/types';
 
 interface LegSparklineProps {
@@ -9,11 +8,11 @@ interface LegSparklineProps {
 
 export function LegSparkline({ legs }: LegSparklineProps) {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5">
       {legs.map((leg) => (
         <div
           key={leg.leg_id}
-          className={`w-1.5 h-1.5 rounded-full ${
+          className={`w-2 h-2 rounded-full ${
             leg.risk_score >= 70
               ? 'bg-red-400'
               : leg.risk_score >= 40

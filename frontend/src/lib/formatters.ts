@@ -3,15 +3,15 @@
 import type { ExpectedLossBreakdown } from './types';
 
 export function riskColor(score: number): string {
-  if (score >= 70) return 'text-red-400';
-  if (score >= 40) return 'text-amber-400';
-  return 'text-emerald-400';
+  if (score >= 70) return 'text-red-600';
+  if (score >= 40) return 'text-amber-600';
+  return 'text-emerald-600';
 }
 
 export function riskBg(score: number): string {
-  if (score >= 70) return 'bg-red-400/10 border-red-400/20';
-  if (score >= 40) return 'bg-amber-400/10 border-amber-400/20';
-  return 'bg-emerald-400/10 border-emerald-400/20';
+  if (score >= 70) return 'bg-red-50 text-red-700';
+  if (score >= 40) return 'bg-amber-50 text-amber-700';
+  return 'bg-emerald-50 text-emerald-700';
 }
 
 export function riskLabel(score: number): string {
@@ -44,9 +44,9 @@ export function formatUSD(amount: number): string {
 }
 
 export function breachColor(probability: number): string {
-  if (probability >= 0.7) return 'text-red-400';
-  if (probability >= 0.4) return 'text-amber-400';
-  return 'text-emerald-400';
+  if (probability >= 0.7) return 'text-red-600';
+  if (probability >= 0.4) return 'text-amber-600';
+  return 'text-emerald-600';
 }
 
 export function formatBreachProbability(probability: number): string {
@@ -56,11 +56,11 @@ export function formatBreachProbability(probability: number): string {
 export function slaOutcomeBadge(outcome: 'met' | 'at_risk' | 'missed') {
   switch (outcome) {
     case 'met':
-      return { icon: 'Check', color: 'text-emerald-400', label: 'SLA met' };
+      return { icon: 'Check', color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'SLA met' };
     case 'at_risk':
-      return { icon: 'AlertTriangle', color: 'text-amber-400', label: 'SLA at risk' };
+      return { icon: 'AlertTriangle', color: 'text-amber-600', bg: 'bg-amber-50', label: 'SLA at risk' };
     case 'missed':
-      return { icon: 'X', color: 'text-red-400', label: 'SLA missed' };
+      return { icon: 'X', color: 'text-red-600', bg: 'bg-red-50', label: 'SLA missed' };
   }
 }
 
@@ -83,9 +83,9 @@ export function lossBreakdownPercents(breakdown: ExpectedLossBreakdown) {
 export function rankColor(allLosses: number[], thisLoss: number): string {
   const min = Math.min(...allLosses);
   const max = Math.max(...allLosses);
-  if (thisLoss === min) return 'text-emerald-400';
-  if (thisLoss === max) return 'text-red-400';
-  return 'text-amber-400';
+  if (thisLoss === min) return 'text-emerald-600';
+  if (thisLoss === max) return 'text-red-600';
+  return 'text-amber-600';
 }
 
 export function formatRelativeTime(dateStr: string): string {

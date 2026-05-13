@@ -13,67 +13,68 @@ export function StatsBar() {
   const amber = all.filter((s) => s.weighted_risk_score >= 40 && s.weighted_risk_score < 70).length;
   const green = all.filter((s) => s.weighted_risk_score < 40).length;
 
-  // Calculate total SLA exposure from active disruptions or high-risk shipments
   const totalExposure = all
     .filter((s) => s.weighted_risk_score >= 70)
-    .reduce((sum) => {
-      // Rough estimate: $50k per high-risk shipment
-      return sum + 50000;
-    }, 0);
+    .reduce((sum) => sum + 50000, 0);
 
   const stats = [
     {
       label: 'Critical',
       value: critical,
       icon: AlertTriangle,
-      color: 'text-red-400',
-      bg: 'bg-red-400/10',
+      color: 'text-red-600',
+      bg: 'bg-red-50',
+      border: 'border-red-100',
     },
     {
       label: 'Elevated',
       value: amber,
       icon: Clock,
-      color: 'text-amber-400',
-      bg: 'bg-amber-400/10',
+      color: 'text-amber-600',
+      bg: 'bg-amber-50',
+      border: 'border-amber-100',
     },
     {
       label: 'Normal',
       value: green,
       icon: CheckCircle,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-400/10',
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-100',
     },
     {
-      label: 'Active Disruptions',
+      label: 'Disruptions',
       value: disruptions.length,
       icon: Boxes,
-      color: 'text-sky-400',
-      bg: 'bg-sky-400/10',
+      color: 'text-indigo-600',
+      bg: 'bg-indigo-50',
+      border: 'border-indigo-100',
     },
     {
       label: 'Est. Exposure',
       value: formatUSD(totalExposure),
       icon: DollarSign,
-      color: 'text-slate-300',
-      bg: 'bg-slate-800',
+      color: 'text-gray-700',
+      bg: 'bg-gray-50',
+      border: 'border-gray-200',
     },
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-3">
+    <div className="grid grid-cols-5 gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
           <div
             key={stat.label}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-sm border border-slate-800 bg-slate-900/50"
+            className={`flex items-center gap-3 px-4 py-4 rounded-xl border ${stat.border} bg-white shadow-sm`}
           >
-            <div className={`w-7 h-7 rounded-sm ${stat.bg} flex items-center justify-center`}>
-              <Icon className={`w-3.5 h-3.5 ${stat.color}`} />
+            <div className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center`}>
+              <Icon className={`w-4 h-4 ${stat.color}`} />
             </div>
             <div>
-              <div className={`text-sm font-mono font-semibold ${stat.color}`}>{stat.value}</div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">{stat.label}</div>
+              <div className={`text-lg font-mono font-bold ${stat.color}`}>{stat.value}</div>
+              <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
             </div>
           </div>
         );

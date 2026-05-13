@@ -23,18 +23,18 @@ export function Button({
 }: ButtonProps) {
   const variants = {
     primary:
-      'bg-sky-500/10 border-sky-500/20 text-sky-400 hover:bg-sky-500/20 hover:border-sky-500/30',
+      'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm',
     secondary:
-      'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:border-slate-600',
+      'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-sm',
     danger:
-      'bg-red-400/10 border-red-400/20 text-red-400 hover:bg-red-400/20 hover:border-red-400/30',
+      'bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 hover:border-red-200',
     ghost:
-      'bg-transparent border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/50',
+      'bg-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100',
   };
 
   const sizes = {
-    sm: 'px-2.5 py-1 text-xs',
-    md: 'px-4 py-2 text-xs font-medium',
+    sm: 'px-3 py-1.5 text-xs',
+    md: 'px-4 py-2 text-sm font-medium',
   };
 
   return (
@@ -42,7 +42,7 @@ export function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center gap-1.5 rounded-sm border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`}
     >
       {children}
     </button>
