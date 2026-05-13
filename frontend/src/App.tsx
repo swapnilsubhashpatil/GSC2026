@@ -1,10 +1,12 @@
 /** @format */
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useSSE } from './hooks/useSSE';
 import { Layout } from './components/layout/Layout';
+import { MobileNav } from './components/layout/MobileNav';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { PageTransition } from './components/ui/PageTransition';
 import { DashboardPage } from './pages/DashboardPage';
 import { ShipmentDetailPage } from './pages/ShipmentDetailPage';
 import { DecisionsPage } from './pages/DecisionsPage';
@@ -14,20 +16,31 @@ function SSEWrapper({ children }: { children: React.ReactNode }) {
   return children;
 }
 
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <PageTransition>
+      <Routes location={location}>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/shipments/:id" element={<ShipmentDetailPage />} />
+        <Route path="/decisions" element={<DecisionsPage />} />
+      </Routes>
+    </PageTransition>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
       <SSEWrapper>
         <Layout>
           <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/shipments/:id" element={<ShipmentDetailPage />} />
-              <Route path="/decisions" element={<DecisionsPage />} />
-            </Routes>
+            <AnimatedRoutes />
           </ErrorBoundary>
           <CommandPalette />
         </Layout>
+        <MobileNav />
       </SSEWrapper>
     </BrowserRouter>
   );
