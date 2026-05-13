@@ -13,6 +13,7 @@ import { getRouteDisplay } from '../lib/constants';
 import { slaRemaining, riskColor } from '../lib/formatters';
 import type { Shipment, Leg, CascadeImpactReport, DecisionRecord } from '../lib/types';
 import { DecisionCard } from '../components/decision/DecisionCard';
+import { CascadeGraph } from '../components/shipment/CascadeGraph';
 
 const LEG_ICONS: Record<string, React.ElementType> = {
   trucking: Truck,
@@ -286,6 +287,11 @@ export function ShipmentDetailPage() {
       {/* Cascade */}
       <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
         <CascadeSection shipment={shipment} />
+      </div>
+
+      {/* Dependency Graph */}
+      <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+        <CascadeGraph shipmentId={shipment.shipment_id} />
       </div>
 
       {/* Decision Engine */}
