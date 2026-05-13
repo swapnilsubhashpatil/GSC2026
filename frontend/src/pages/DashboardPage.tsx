@@ -7,6 +7,7 @@ import { ShipmentLeaderboard } from '../components/dashboard/ShipmentLeaderboard
 import { ShipmentGrid } from '../components/dashboard/ShipmentGrid';
 import { EventFeed } from '../components/dashboard/EventFeed';
 import { PendingApprovals } from '../components/dashboard/PendingApprovals';
+import { RiskDistribution } from '../components/dashboard/RiskDistribution';
 import { StatsBarSkeleton, ShipmentRowSkeleton } from '../components/ui/Skeleton';
 import { usePigeonStore } from '../store/usePigeonStore';
 import { useToastStore } from '../store/useToastStore';
@@ -212,6 +213,7 @@ export function DashboardPage() {
 
         {/* Right sidebar — 1/3 */}
         <div className="space-y-6">
+          <RiskDistribution />
           <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
             <PendingApprovals />
           </div>

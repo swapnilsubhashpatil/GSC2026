@@ -8,6 +8,7 @@ import { RiskBadge } from '../ui/RiskBadge';
 import { LegSparkline } from '../ui/LegSparkline';
 import { slaRemaining } from '../../lib/formatters';
 import { getRouteDisplay } from '../../lib/constants';
+import { EmptyState } from '../ui/EmptyState';
 
 type SortKey = 'score' | 'deadline' | 'id';
 type SortDir = 'asc' | 'desc';
@@ -106,8 +107,12 @@ export function ShipmentLeaderboard({
           <tbody className="divide-y divide-gray-100">
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-sm text-gray-400">
-                  No shipments match your filters
+                <td colSpan={7}>
+                  <EmptyState
+                    title="No shipments found"
+                    description="Try adjusting your search or filters to see more results."
+                    icon="search"
+                  />
                 </td>
               </tr>
             )}

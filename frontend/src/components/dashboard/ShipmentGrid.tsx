@@ -8,6 +8,7 @@ import { RiskBadge } from '../ui/RiskBadge';
 import { LegSparkline } from '../ui/LegSparkline';
 import { slaRemaining } from '../../lib/formatters';
 import { getRouteDisplay } from '../../lib/constants';
+import { EmptyState } from '../ui/EmptyState';
 import type { Shipment } from '../../lib/types';
 
 interface ShipmentGridProps {
@@ -114,8 +115,12 @@ export function ShipmentGrid({ searchQuery = '', statusFilter = 'all', minRiskFi
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {filtered.length === 0 && (
-        <div className="col-span-full text-center py-12 text-sm text-gray-400">
-          No shipments match your filters
+        <div className="col-span-full">
+          <EmptyState
+            title="No shipments found"
+            description="Try adjusting your search or filters to see more results."
+            icon="search"
+          />
         </div>
       )}
       {filtered.map((shipment) => (
