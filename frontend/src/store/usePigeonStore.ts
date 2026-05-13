@@ -7,7 +7,7 @@ import type {
   DisruptionEvent,
   FeedItem,
   DecisionStatus,
-} from './types';
+} from '../lib/types';
 
 interface PigeonStore {
   // Shipments

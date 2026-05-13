@@ -18,7 +18,7 @@ export function NetworkGraph({ shipmentId }: { shipmentId: string }) {
   const [report, setReport] = useState<CascadeImpactReport | null>(null);
   const [nodes, setNodes] = useState<Node[]>([]);
   const svgRef = useRef<SVGSVGElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     Promise.all([api.cascadeGraph(), api.simulateCascade(shipmentId, 18)])
@@ -39,7 +39,6 @@ export function NetworkGraph({ shipmentId }: { shipmentId: string }) {
     const animate = () => {
       setNodes((prev) => {
         const next = prev.map((n) => ({ ...n }));
-        // Simple force simulation
         for (let i = 0; i < next.length; i++) {
           for (let j = i + 1; j < next.length; j++) {
             const dx = next[j].x - next[i].x;
@@ -52,13 +51,11 @@ export function NetworkGraph({ shipmentId }: { shipmentId: string }) {
             next[j].vx += fx; next[j].vy += fy;
           }
         }
-        // Center root
         const root = next.find((n) => n.isRoot);
         if (root) {
           root.vx += (200 - root.x) * 0.02;
           root.vy += (150 - root.y) * 0.02;
         }
-        // Update positions
         for (const n of next) {
           n.vx *= 0.9; n.vy *= 0.9;
           n.x += n.vx; n.y += n.vy;
@@ -78,10 +75,9 @@ export function NetworkGraph({ shipmentId }: { shipmentId: string }) {
       <div className="flex items-center gap-2 mb-2">
         <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Dependency Network</span>
       </div>
-      {nodes.length === 0 ? <div className="h-40 flex items-center justify-center text-xs text-gray-600">Loading graph...</div> : (
-        <div className="relative h-[300px] w-full rounded-xl border border-white/5 bg-bg-primary overflow-hidden">
+      {nodes.length === 0 ? <div className="h-40 flex items-center justify-center text-xs text-gray-400">Loading graph...</div> : (
+        <div className="relative h-[300px] w-full rounded-xl border border-gray-200 bg-white overflow-hidden">
           <svg ref={svgRef} className="w-full h-full" viewBox="0 0 500 300">
-            {/* Edges */}
             {dependents.map((depId) => {
               const source = nodes.find((n) => n.id === shipmentId);
               const target = nodes.find((n) => n.id === depId);
@@ -96,7 +92,6 @@ export function NetworkGraph({ shipmentId }: { shipmentId: string }) {
                 </g>
               );
             })}
-            {/* Nodes */}
             {nodes.map((node) => {
               const nodeReport = report?.cascade_nodes.find((n) => n.shipment_id === node.id);
               const isBreached = nodeReport?.sla_breached;

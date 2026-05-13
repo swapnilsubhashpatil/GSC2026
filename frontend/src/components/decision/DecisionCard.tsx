@@ -64,7 +64,7 @@ function OptionColumn({ option, index, isSelected, isAutoExecuted, allLosses, on
       <p className="text-[11px] text-gray-500 leading-relaxed mb-5 italic border-l-2 border-gray-200 pl-3">"{option.rationale}"</p>
       {isAutoExecuted && isSelected ? (
         <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 mt-auto px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-100"><Zap className="w-3.5 h-3.5" />PIGEON SELECTED</div>
-      ) : decision.status === 'pending_approval' && onApprove ? (
+      ) : onApprove ? (
         <Button variant="primary" size="sm" className="w-full mt-auto" onClick={onApprove} disabled={disabled}>Approve</Button>
       ) : null}
     </div>

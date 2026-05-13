@@ -13,7 +13,7 @@ export function useSSE() {
   const setConnected = usePigeonStore((s) => s.setConnected);
 
   const esRef = useRef<EventSource | null>(null);
-  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     function connect() {

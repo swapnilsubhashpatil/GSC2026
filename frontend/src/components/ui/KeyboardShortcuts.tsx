@@ -34,24 +34,24 @@ export function KeyboardShortcuts() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className="relative w-full max-w-md bg-bg-elevated rounded-2xl shadow-2xl border border-white/10 overflow-hidden animate-fade-in">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setOpen(false)} />
+      <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-fade-in">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
             <Keyboard className="w-5 h-5 text-gray-500" />
-            <h2 className="text-base font-semibold text-white">Keyboard Shortcuts</h2>
+            <h2 className="text-base font-semibold text-gray-900">Keyboard Shortcuts</h2>
           </div>
-          <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-colors"><X className="w-4 h-4" /></button>
+          <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-6 space-y-3">
           {SHORTCUTS.map((shortcut, i) => (
             <div key={i} className="flex items-center justify-between">
-              <span className="text-sm text-gray-500">{shortcut.description}</span>
+              <span className="text-sm text-gray-600">{shortcut.description}</span>
               <div className="flex items-center gap-1">
                 {shortcut.keys.map((key, j) => (
                   <span key={j} className="flex items-center">
-                    {j > 0 && <span className="text-gray-700 mx-1">+</span>}
-                    <kbd className="px-2 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-gray-400 font-mono font-medium min-w-[24px] text-center">{key === 'Cmd' ? <Command className="w-3 h-3" /> : key}</kbd>
+                    {j > 0 && <span className="text-gray-300 mx-1">+</span>}
+                    <kbd className="px-2 py-1 rounded-md bg-gray-100 border border-gray-200 text-xs text-gray-500 font-mono font-medium min-w-[24px] text-center">{key === 'Cmd' ? <Command className="w-3 h-3" /> : key}</kbd>
                   </span>
                 ))}
               </div>

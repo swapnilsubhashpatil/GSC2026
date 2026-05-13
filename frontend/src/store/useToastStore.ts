@@ -14,13 +14,14 @@ interface ToastStore {
   removeToast: (id: string) => void;
 }
 
+let toastCounter = 0;
+
 export const useToastStore = create<ToastStore>((set) => ({
   toasts: [],
   addToast: (toast) =>
     set((state) => {
-      const id = `toast-${+new Date()}-${Math.random()}`;
+      const id = `toast-${+new Date()}-${++toastCounter}`;
       const newToast = { ...toast, id };
-      // Auto remove after 4 seconds
       setTimeout(() => {
         set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }));
       }, 4000);

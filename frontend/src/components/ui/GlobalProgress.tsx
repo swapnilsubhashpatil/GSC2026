@@ -9,7 +9,7 @@ export function GlobalProgress() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-[200]">
-      <div className="h-0.5 bg-white/5 w-full">
+      <div className="h-0.5 bg-gray-100 w-full">
         <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-300 ease-out" style={{ width: `${progress}%` }} />
       </div>
     </div>
