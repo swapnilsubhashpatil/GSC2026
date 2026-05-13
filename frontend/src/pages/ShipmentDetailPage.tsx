@@ -9,6 +9,7 @@ import { useToastStore } from '../store/useToastStore';
 import { api } from '../lib/api';
 import { RiskBadge } from '../components/ui/RiskBadge';
 import { Button } from '../components/ui/Button';
+import { CopyButton } from '../components/ui/CopyButton';
 import { getRouteDisplay } from '../lib/constants';
 import { slaRemaining, riskColor } from '../lib/formatters';
 import type { Shipment, Leg, CascadeImpactReport, DecisionRecord } from '../lib/types';
@@ -241,6 +242,7 @@ export function ShipmentDetailPage() {
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-gray-900">{shipment.shipment_id}</h1>
+              <CopyButton text={shipment.shipment_id} />
               <RiskBadge score={shipment.weighted_risk_score} size="md" />
             </div>
             <p className="text-sm text-gray-500 mt-1">

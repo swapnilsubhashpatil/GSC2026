@@ -8,6 +8,7 @@ import { useToastStore } from '../store/useToastStore';
 import { DecisionCard } from '../components/decision/DecisionCard';
 import { Button } from '../components/ui/Button';
 import { Loading } from '../components/ui/Loading';
+import { ExportButton } from '../components/ui/ExportButton';
 import { formatUSD, formatRelativeTime } from '../lib/formatters';
 import type { DecisionRecord } from '../lib/types';
 
@@ -182,10 +183,17 @@ export function DecisionsPage() {
 
       {/* Resolved Section */}
       <div className="space-y-4">
-        <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-          Resolved ({auditLog.length})
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            Resolved ({auditLog.length})
+          </h2>
+          <ExportButton
+            data={auditLog}
+            filename="decisions-audit-log"
+            label="Export CSV"
+          />
+        </div>
         {auditLog.length === 0 ? (
           <div className="text-center py-10 text-gray-400 text-sm border border-dashed border-gray-200 rounded-xl bg-gray-50/50">
             No resolved decisions yet

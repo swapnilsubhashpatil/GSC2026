@@ -19,7 +19,12 @@ type StatusFilter = 'all' | 'in_transit' | 'delayed' | 'at_port' | 'delivered' |
 export function DashboardPage() {
   const setShipments = usePigeonStore((s) => s.setShipments);
   const addToast = useToastStore((s) => s.addToast);
-  const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth <= 1024 ? 'grid' : 'table';
+    }
+    return 'table';
+  });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
