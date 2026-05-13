@@ -25,7 +25,7 @@
     "origin": { "port": "CNSHA", "country": "CN" },
     "destination": { "port": "NLRTM", "country": "NL" },
     "carrier": "Maersk",
-    "SLA_deadline": "2026-05-19T12:00:00Z",
+    "SLA_deadline": "2026-05-15T12:00:00Z",
     "customer_id": "CUST-002",
     "purchase_orders": ["PO-7003"],
     "legs": [
@@ -65,7 +65,7 @@
     "origin": { "port": "CNSHA", "country": "CN" },
     "destination": { "port": "NLRTM", "country": "NL" },
     "carrier": "Evergreen",
-    "SLA_deadline": "2026-05-17T00:00:00Z",
+    "SLA_deadline": "2026-05-14T18:00:00Z",
     "customer_id": "CUST-001",
     "purchase_orders": ["PO-7006"],
     "legs": [
@@ -165,7 +165,7 @@
     "origin": { "port": "CNSHA", "country": "CN" },
     "destination": { "port": "DEHAM", "country": "DE" },
     "carrier": "Hapag-Lloyd",
-    "SLA_deadline": "2026-05-17T06:00:00Z",
+    "SLA_deadline": "2026-05-15T00:00:00Z",
     "customer_id": "CUST-008",
     "purchase_orders": ["PO-7012", "PO-7013"],
     "legs": [
