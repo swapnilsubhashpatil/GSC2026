@@ -13,17 +13,17 @@ type SortKey = 'score' | 'deadline' | 'id';
 type SortDir = 'asc' | 'desc';
 
 interface ShipmentLeaderboardProps {
-  sortKey: SortKey;
-  sortDir: SortDir;
-  onSort: (key: SortKey) => void;
+  sortKey?: SortKey;
+  sortDir?: SortDir;
+  onSort?: (key: SortKey) => void;
   searchQuery?: string;
   statusFilter?: string;
   minRiskFilter?: number | null;
 }
 
 export function ShipmentLeaderboard({
-  sortKey,
-  sortDir,
+  sortKey = 'score',
+  sortDir = 'desc',
   onSort,
   searchQuery = '',
   statusFilter = 'all',

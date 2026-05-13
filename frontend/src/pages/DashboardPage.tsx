@@ -1,9 +1,10 @@
 /** @format */
 
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, X, RefreshCw } from 'lucide-react';
+import { Search, Filter, X, RefreshCw, LayoutGrid, Table2 } from 'lucide-react';
 import { StatsBar } from '../components/dashboard/StatsBar';
 import { ShipmentLeaderboard } from '../components/dashboard/ShipmentLeaderboard';
+import { ShipmentGrid } from '../components/dashboard/ShipmentGrid';
 import { EventFeed } from '../components/dashboard/EventFeed';
 import { PendingApprovals } from '../components/dashboard/PendingApprovals';
 import { StatsBarSkeleton, ShipmentRowSkeleton } from '../components/ui/Skeleton';
@@ -11,15 +12,13 @@ import { usePigeonStore } from '../store/usePigeonStore';
 import { useToastStore } from '../store/useToastStore';
 import { api } from '../lib/api';
 
-type SortKey = 'score' | 'deadline' | 'id';
-type SortDir = 'asc' | 'desc';
+type ViewMode = 'table' | 'grid';
 type StatusFilter = 'all' | 'in_transit' | 'delayed' | 'at_port' | 'delivered' | 'pending';
 
 export function DashboardPage() {
   const setShipments = usePigeonStore((s) => s.setShipments);
   const addToast = useToastStore((s) => s.addToast);
-  const [sortKey, setSortKey] = useState<SortKey>('score');
-  const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
@@ -36,15 +35,6 @@ export function DashboardPage() {
         setLoading(false);
       });
   }, [setShipments, addToast]);
-
-  function handleSort(key: SortKey) {
-    if (sortKey === key) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDir('desc');
-    }
-  }
 
   const activeFilters = useMemo(() => {
     const filters = [];
@@ -90,31 +80,50 @@ export function DashboardPage() {
           <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
           <p className="text-sm text-gray-500 mt-1">Real-time supply chain monitoring and risk assessment</p>
         </div>
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => {
-            setLoading(true);
-            api.shipments()
-              .then((data) => {
-                setShipments(data);
-                addToast({ message: 'Shipments refreshed', type: 'success' });
-              })
-              .catch((err) => {
-                addToast({ message: err.message || 'Failed to refresh', type: 'error' });
-              })
-              .finally(() => setLoading(false));
-          }}
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center bg-gray-100 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('table')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                viewMode === 'table' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <Table2 className="w-4 h-4" />
+              Table
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                viewMode === 'grid' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              Grid
+            </button>
+          </div>
+          <button
+            onClick={() => {
+              setLoading(true);
+              api.shipments()
+                .then((data) => {
+                  setShipments(data);
+                  addToast({ message: 'Shipments refreshed', type: 'success' });
+                })
+                .catch(() => addToast({ message: 'Failed to refresh', type: 'error' }))
+                .finally(() => setLoading(false));
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Refresh
+          </button>
+        </div>
       </div>
 
       <StatsBar />
 
       {/* Filters */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -182,16 +191,23 @@ export function DashboardPage() {
       )}
 
       <div className="grid grid-cols-3 gap-6">
-        {/* Shipments table — 2/3 */}
-        <div className="col-span-2 rounded-xl border border-gray-200 bg-white shadow-sm p-6">
-          <ShipmentLeaderboard
-            sortKey={sortKey}
-            sortDir={sortDir}
-            onSort={handleSort}
-            searchQuery={searchQuery}
-            statusFilter={statusFilter}
-            minRiskFilter={minRiskFilter}
-          />
+        {/* Shipments — 2/3 */}
+        <div className="col-span-2">
+          {viewMode === 'table' ? (
+            <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
+              <ShipmentLeaderboard
+                searchQuery={searchQuery}
+                statusFilter={statusFilter}
+                minRiskFilter={minRiskFilter}
+              />
+            </div>
+          ) : (
+            <ShipmentGrid
+              searchQuery={searchQuery}
+              statusFilter={statusFilter}
+              minRiskFilter={minRiskFilter}
+            />
+          )}
         </div>
 
         {/* Right sidebar — 1/3 */}
