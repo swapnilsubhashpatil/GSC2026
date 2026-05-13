@@ -1,21 +1,15 @@
 /** @format */
 
 export function riskColor(score: number): string {
-  if (score >= 70) return 'text-red-500';
-  if (score >= 40) return 'text-amber-500';
-  return 'text-emerald-500';
+  if (score >= 70) return 'text-red-600';
+  if (score >= 40) return 'text-amber-600';
+  return 'text-emerald-600';
 }
 
 export function riskBg(score: number): string {
-  if (score >= 70) return 'bg-red-500/10 text-red-400 border-red-500/20';
-  if (score >= 40) return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-  return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-}
-
-export function riskGlow(score: number): string {
-  if (score >= 70) return 'glow-red';
-  if (score >= 40) return 'glow-amber';
-  return 'glow-emerald';
+  if (score >= 70) return 'bg-red-50 text-red-700 border-red-100';
+  if (score >= 40) return 'bg-amber-50 text-amber-700 border-amber-100';
+  return 'bg-emerald-50 text-emerald-700 border-emerald-100';
 }
 
 export function riskLabel(score: number): string {
@@ -32,17 +26,13 @@ export function slaRemaining(deadline: string): string {
 }
 
 export function formatUSD(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(amount);
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
 }
 
 export function breachColor(probability: number): string {
-  if (probability >= 0.7) return 'text-red-500';
-  if (probability >= 0.4) return 'text-amber-500';
-  return 'text-emerald-500';
+  if (probability >= 0.7) return 'text-red-600';
+  if (probability >= 0.4) return 'text-amber-600';
+  return 'text-emerald-600';
 }
 
 export function formatBreachProbability(probability: number): string {
@@ -51,9 +41,9 @@ export function formatBreachProbability(probability: number): string {
 
 export function slaOutcomeBadge(outcome: 'met' | 'at_risk' | 'missed') {
   switch (outcome) {
-    case 'met': return { icon: 'Check', color: 'text-emerald-400', bg: 'bg-emerald-500/10', label: 'SLA met' };
-    case 'at_risk': return { icon: 'AlertTriangle', color: 'text-amber-400', bg: 'bg-amber-500/10', label: 'SLA at risk' };
-    case 'missed': return { icon: 'X', color: 'text-red-400', bg: 'bg-red-500/10', label: 'SLA missed' };
+    case 'met': return { icon: 'Check', color: 'text-emerald-600', bg: 'bg-emerald-50', label: 'SLA met' };
+    case 'at_risk': return { icon: 'AlertTriangle', color: 'text-amber-600', bg: 'bg-amber-50', label: 'SLA at risk' };
+    case 'missed': return { icon: 'X', color: 'text-red-600', bg: 'bg-red-50', label: 'SLA missed' };
   }
 }
 
@@ -66,19 +56,15 @@ export function formatEtaDelta(hours: number): string {
 export function lossBreakdownPercents(breakdown: { direct_cost: number; sla_penalty: number; cascade_exposure: number }) {
   const total = breakdown.direct_cost + breakdown.sla_penalty + breakdown.cascade_exposure;
   if (total === 0) return { direct: 0, penalty: 0, cascade: 0 };
-  return {
-    direct: (breakdown.direct_cost / total) * 100,
-    penalty: (breakdown.sla_penalty / total) * 100,
-    cascade: (breakdown.cascade_exposure / total) * 100,
-  };
+  return { direct: (breakdown.direct_cost / total) * 100, penalty: (breakdown.sla_penalty / total) * 100, cascade: (breakdown.cascade_exposure / total) * 100 };
 }
 
 export function rankColor(allLosses: number[], thisLoss: number): string {
   const min = Math.min(...allLosses);
   const max = Math.max(...allLosses);
-  if (thisLoss === min) return 'text-emerald-400';
-  if (thisLoss === max) return 'text-red-400';
-  return 'text-amber-400';
+  if (thisLoss === min) return 'text-emerald-600';
+  if (thisLoss === max) return 'text-red-600';
+  return 'text-amber-600';
 }
 
 export function formatRelativeTime(dateStr: string): string {

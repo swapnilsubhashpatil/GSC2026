@@ -15,22 +15,24 @@ export function StatsBar() {
   const totalExposure = all.filter((s) => s.weighted_risk_score >= 70).reduce((sum) => sum + 50000, 0);
 
   const stats = [
-    { label: 'Critical', value: critical, icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/5 border-red-500/10' },
-    { label: 'Elevated', value: elevated, icon: Clock, color: 'text-amber-400', bg: 'bg-amber-500/5 border-amber-500/10' },
-    { label: 'Normal', value: low, icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/5 border-emerald-500/10' },
-    { label: 'Disruptions', value: disruptions.length, icon: Zap, color: 'text-cyan-400', bg: 'bg-cyan-500/5 border-cyan-500/10' },
-    { label: 'Exposure', value: formatUSD(totalExposure), icon: DollarSign, color: 'text-gray-200', bg: 'bg-white/5 border-white/10' },
+    { label: 'Critical', value: critical, icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50' },
+    { label: 'Elevated', value: elevated, icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Normal', value: low, icon: CheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { label: 'Disruptions', value: disruptions.length, icon: Zap, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+    { label: 'Exposure', value: formatUSD(totalExposure), icon: DollarSign, color: 'text-gray-900', bg: 'bg-gray-50' },
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-3">
+    <div className="grid grid-cols-5 gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.label} className={`flex flex-col p-4 rounded-xl border ${stat.bg} backdrop-blur-sm`}>
+          <div key={stat.label} className="flex flex-col p-5 rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="flex items-center gap-2 mb-2">
-              <Icon className={`w-3.5 h-3.5 ${stat.color}`} />
-              <span className="text-[10px] uppercase tracking-wider text-gray-500 font-semibold">{stat.label}</span>
+              <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
+                <Icon className={`w-4 h-4 ${stat.color}`} />
+              </div>
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{stat.label}</span>
             </div>
             <span className={`text-2xl font-mono font-bold ${stat.color}`}>{stat.value}</span>
           </div>
