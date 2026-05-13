@@ -7,6 +7,7 @@ import { ShipmentLeaderboard } from '../components/dashboard/ShipmentLeaderboard
 import { EventFeed } from '../components/dashboard/EventFeed';
 import { PendingApprovals } from '../components/dashboard/PendingApprovals';
 import { RiskDistribution } from '../components/dashboard/RiskDistribution';
+import { WorldMap } from '../components/dashboard/WorldMap';
 import { usePigeonStore } from '../store/usePigeonStore';
 import { useToastStore } from '../store/useToastStore';
 import { useProgressStore } from '../store/useProgressStore';
@@ -96,6 +97,7 @@ export function DashboardPage() {
           <ShipmentLeaderboard searchQuery={searchQuery} statusFilter={statusFilter} minRiskFilter={minRiskFilter} />
         </div>
         <div className="space-y-6">
+          <WorldMap />
           <RiskDistribution />
           <div className="rounded-xl border border-white/5 bg-bg-elevated p-5"><PendingApprovals /></div>
           <div className="rounded-xl border border-white/5 bg-bg-elevated p-5 min-h-[280px]"><EventFeed /></div>
