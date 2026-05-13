@@ -1,6 +1,7 @@
 /** @format */
 
 import { TopNav } from './TopNav';
+import { ToastContainer } from '../ui/ToastContainer';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 overflow-auto p-8">
         {children}
       </main>
+      <ToastContainer />
     </div>
   );
 }

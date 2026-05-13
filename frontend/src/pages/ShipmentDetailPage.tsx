@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, RefreshCw, Anchor, Ship, Truck, Train, Plane, Package, AlertTriangle } from 'lucide-react';
 import { Loading } from '../components/ui/Loading';
+import { DecisionCardSkeleton } from '../components/ui/Skeleton';
+import { useToastStore } from '../store/useToastStore';
 import { api } from '../lib/api';
 import { RiskBadge } from '../components/ui/RiskBadge';
 import { Button } from '../components/ui/Button';
@@ -154,6 +156,7 @@ function StatCard({ label, value, color }: { label: string; value: string; color
 export function ShipmentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const addToast = useToastStore((s) => s.addToast);
   const [shipment, setShipment] = useState<Shipment | null>(null);
   const [loading, setLoading] = useState(true);
   const [decision, setDecision] = useState<DecisionRecord | null>(null);
@@ -164,8 +167,11 @@ export function ShipmentDetailPage() {
     if (!id) return;
     api.shipment(id)
       .then(setShipment)
+      .catch((err) => {
+        addToast({ message: err.message || 'Failed to load shipment', type: 'error' });
+      })
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, addToast]);
 
   async function handleRefresh() {
     if (!id) return;
@@ -173,6 +179,9 @@ export function ShipmentDetailPage() {
     try {
       const updated = await api.refreshRisk(id);
       setShipment(updated);
+      addToast({ message: 'Risk scores refreshed', type: 'success' });
+    } catch {
+      addToast({ message: 'Failed to refresh risk scores', type: 'error' });
     } finally {
       setRefreshing(false);
     }
@@ -184,8 +193,14 @@ export function ShipmentDetailPage() {
     try {
       const record = await api.generateDecision(id);
       setDecision(record);
-    } catch (err) {
-      console.error('Decision generation failed:', err);
+      addToast({
+        message: record.status === 'auto_executed'
+          ? 'Decision auto-executed by Pigeon'
+          : 'Decision generated — awaiting approval',
+        type: 'success',
+      });
+    } catch {
+      addToast({ message: 'Failed to generate decision options', type: 'error' });
     } finally {
       setGenerating(false);
     }
@@ -280,21 +295,15 @@ export function ShipmentDetailPage() {
             <h3 className="text-sm font-semibold text-gray-900">Decision Engine</h3>
             <p className="text-xs text-gray-500 mt-0.5">AI-powered reroute recommendations</p>
           </div>
-          {!decision && (
-            <Button variant="primary" onClick={handleGenerateDecision} disabled={generating}>
-              {generating ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                'Generate Options'
-              )}
+          {!decision && !generating && (
+            <Button variant="primary" onClick={handleGenerateDecision}>
+              Generate Options
             </Button>
           )}
         </div>
 
-        {decision && <DecisionCard decision={decision} onUpdate={setDecision} />}
+        {generating && <DecisionCardSkeleton />}
+        {decision && !generating && <DecisionCard decision={decision} onUpdate={setDecision} />}
       </div>
     </div>
   );

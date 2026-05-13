@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { GitPullRequest, ArrowRight, CheckCircle2, Zap, XCircle, Clock } from 'lucide-react';
 import { api } from '../lib/api';
 import { usePigeonStore } from '../store/usePigeonStore';
+import { useToastStore } from '../store/useToastStore';
 import { DecisionCard } from '../components/decision/DecisionCard';
 import { Button } from '../components/ui/Button';
 import { Loading } from '../components/ui/Loading';
@@ -12,6 +13,7 @@ import type { DecisionRecord } from '../lib/types';
 
 function PendingRow({ decision }: { decision: DecisionRecord }) {
   const shipments = usePigeonStore((s) => s.shipments);
+  const addToast = useToastStore((s) => s.addToast);
   const shipment = shipments.get(decision.shipment_id);
   const recommended = decision.options[0];
   const [expanded, setExpanded] = useState(false);
@@ -27,8 +29,9 @@ function PendingRow({ decision }: { decision: DecisionRecord }) {
         message: `Approved ${decision.decision_id} for ${decision.shipment_id}`,
         timestamp: +new Date(),
       });
-    } catch (err) {
-      console.error(err);
+      addToast({ message: `Approved ${decision.decision_id}`, type: 'success' });
+    } catch {
+      addToast({ message: 'Failed to approve decision', type: 'error' });
     }
   }
 
@@ -127,6 +130,7 @@ export function DecisionsPage() {
   const pending = usePigeonStore((s) => s.pendingDecisions);
   const auditLog = usePigeonStore((s) => s.auditLog);
   const setAuditLog = usePigeonStore((s) => s.setAuditLog);
+  const addToast = useToastStore((s) => s.addToast);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -137,8 +141,11 @@ export function DecisionsPage() {
         setAuditLog(auditData);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
-  }, [setAuditLog]);
+      .catch((err) => {
+        addToast({ message: err.message || 'Failed to load decisions', type: 'error' });
+        setLoading(false);
+      });
+  }, [setAuditLog, addToast]);
 
   if (loading) {
     return <Loading text="Loading decisions..." />;

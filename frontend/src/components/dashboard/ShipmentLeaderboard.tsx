@@ -16,21 +16,53 @@ interface ShipmentLeaderboardProps {
   sortKey: SortKey;
   sortDir: SortDir;
   onSort: (key: SortKey) => void;
+  searchQuery?: string;
+  statusFilter?: string;
+  minRiskFilter?: number | null;
 }
 
-export function ShipmentLeaderboard({ sortKey, sortDir, onSort }: ShipmentLeaderboardProps) {
+export function ShipmentLeaderboard({
+  sortKey,
+  sortDir,
+  onSort,
+  searchQuery = '',
+  statusFilter = 'all',
+  minRiskFilter,
+}: ShipmentLeaderboardProps) {
   const shipments = usePigeonStore((s) => s.shipments);
   const navigate = useNavigate();
 
-  const sorted = useMemo(() => {
-    const arr = Array.from(shipments.values());
+  const filtered = useMemo(() => {
+    let arr = Array.from(shipments.values());
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      arr = arr.filter(
+        (s) =>
+          s.shipment_id.toLowerCase().includes(q) ||
+          s.carrier.toLowerCase().includes(q) ||
+          s.origin.port.toLowerCase().includes(q) ||
+          s.destination.port.toLowerCase().includes(q) ||
+          getRouteDisplay(s).toLowerCase().includes(q)
+      );
+    }
+
+    if (statusFilter && statusFilter !== 'all') {
+      arr = arr.filter((s) => s.status === statusFilter);
+    }
+
+    if (minRiskFilter !== null && minRiskFilter !== undefined) {
+      arr = arr.filter((s) => s.weighted_risk_score >= minRiskFilter);
+    }
+
     const dir = sortDir === 'asc' ? 1 : -1;
     return arr.sort((a, b) => {
       if (sortKey === 'score') return (a.weighted_risk_score - b.weighted_risk_score) * dir;
-      if (sortKey === 'deadline') return (new Date(a.SLA_deadline).getTime() - new Date(b.SLA_deadline).getTime()) * dir;
+      if (sortKey === 'deadline')
+        return (new Date(a.SLA_deadline).getTime() - new Date(b.SLA_deadline).getTime()) * dir;
       return a.shipment_id.localeCompare(b.shipment_id) * dir;
     });
-  }, [shipments, sortKey, sortDir]);
+  }, [shipments, sortKey, sortDir, searchQuery, statusFilter, minRiskFilter]);
 
   const SortIcon = ({ column }: { column: SortKey }) => {
     if (sortKey !== column) return <ArrowUpDown className="w-3.5 h-3.5 text-gray-300" />;
@@ -55,7 +87,7 @@ export function ShipmentLeaderboard({ sortKey, sortDir, onSort }: ShipmentLeader
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-gray-900">Shipments</h3>
-        <span className="text-xs text-gray-400 font-mono">{sorted.length} total</span>
+        <span className="text-xs text-gray-400 font-mono">{filtered.length} of {shipments.size}</span>
       </div>
 
       <div className="flex-1 overflow-auto min-h-0">
@@ -72,7 +104,14 @@ export function ShipmentLeaderboard({ sortKey, sortDir, onSort }: ShipmentLeader
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {sorted.map((s) => (
+            {filtered.length === 0 && (
+              <tr>
+                <td colSpan={7} className="py-12 text-center text-sm text-gray-400">
+                  No shipments match your filters
+                </td>
+              </tr>
+            )}
+            {filtered.map((s) => (
               <tr
                 key={s.shipment_id}
                 onClick={() => navigate(`/shipments/${s.shipment_id}`)}
@@ -93,9 +132,7 @@ export function ShipmentLeaderboard({ sortKey, sortDir, onSort }: ShipmentLeader
                 <td className="py-3.5 pr-4">
                   <span
                     className={`text-sm font-mono font-medium ${
-                      slaRemaining(s.SLA_deadline) === 'BREACHED'
-                        ? 'text-red-600'
-                        : 'text-gray-500'
+                      slaRemaining(s.SLA_deadline) === 'BREACHED' ? 'text-red-600' : 'text-gray-500'
                     }`}
                   >
                     {slaRemaining(s.SLA_deadline)}
